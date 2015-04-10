@@ -114,10 +114,11 @@
                     }
 
                     $scope.headClass = function(node) {
-                        var liSelectionClass = classIfDefined($scope.options.injectClasses.liSelected, false);
-                        var injectSelectionClass = "";
-                        if (liSelectionClass && isSelectedNode(node))
-                            injectSelectionClass = " " + liSelectionClass;
+                        //var liSelectionClass = classIfDefined($scope.options.injectClasses.liSelected, false);
+                        //var injectSelectionClass = "";
+                        //if (liSelectionClass && isSelectedNode(node))
+                        //    injectSelectionClass = " " + liSelectionClass;
+                        var injectSelectionClass = " " + node.type;
                         if ($scope.options.isLeaf(node))
                             return "tree-leaf" + injectSelectionClass;
                         if ($scope.expandedNodesMap[this.$id])
@@ -192,27 +193,27 @@
                         }
                     };
 
-                    $scope.selectedClass = function() {
-                        var isThisNodeSelected = isSelectedNode(this.node);
-                        var labelSelectionClass = classIfDefined($scope.options.injectClasses.labelSelected, false);
-                        var injectSelectionClass = "";
-                        if (labelSelectionClass && isThisNodeSelected)
-                            injectSelectionClass = " " + labelSelectionClass;
+                    $scope.selectedClass = function(ntype) {
+                        //var isThisNodeSelected = isSelectedNode(this.node);
+                        //var labelSelectionClass = classIfDefined($scope.options.injectClasses.labelSelected, false);
+                        //var injectSelectionClass = "";
+                        //if (labelSelectionClass && isThisNodeSelected)
+                        //    injectSelectionClass = " " + labelSelectionClass;
 
-                        return isThisNodeSelected?"tree-selected" + injectSelectionClass:"";
+                        return (this.node == $scope.selectedNode)?"tree-selected " + ntype:ntype;
                     };
 
                     //tree template
                     var orderBy = $scope.orderBy ? ' | orderBy:orderBy:reverseOrder' : '';
                     var template =
                         '<ul '+classIfDefined($scope.options.injectClasses.ul, true)+'>' +
-                            '<li ng-repeat="node in node.' + $scope.options.nodeChildren + ' | filter:filterExpression:filterComparator ' + orderBy + '" ng-class="headClass(node)" '+classIfDefined($scope.options.injectClasses.li, true)+'>' +
-                            '<i class="tree-branch-head" ng-class="iBranchClass()" ng-click="selectNodeHead(node)"></i>' +
-                            '<i class="tree-leaf-head '+classIfDefined($scope.options.injectClasses.iLeaf, false)+'"></i>' +
-                            '<div class="tree-label '+classIfDefined($scope.options.injectClasses.label, false)+'" ng-class="selectedClass()" ng-click="selectNodeLabel(node)" tree-transclude></div>' +
-                            '<treeitem ng-if="nodeExpanded()"></treeitem>' +
-                            '</li>' +
-                            '</ul>';
+                        '<li ng-repeat="node in node.' + $scope.options.nodeChildren + ' | orderBy:orderBy:reverseOrder" ng-class="headClass(node)" '+classIfDefined($scope.options.injectClasses.li, true)+'>' +
+                        '<i class="tree-branch-head" ng-class="iBranchClass()" ng-click="selectNodeHead(node)"></i>' +
+                        '<i class="tree-leaf-head '+classIfDefined($scope.options.injectClasses.iLeaf, false)+'"></i>' +
+                        '<div class="tree-label '+classIfDefined($scope.options.injectClasses.label, false)+'" ng-class="selectedClass(node.type)" ng-click="selectNodeLabel(node)" tree-transclude></div>' +
+                        '<treeitem ng-if="nodeExpanded()"></treeitem>' +
+                        '</li>' +
+                        '</ul>';
 
                     this.template = $compile(template);
                 }],
